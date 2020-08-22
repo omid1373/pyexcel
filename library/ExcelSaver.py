@@ -4,7 +4,7 @@ class Saver:
     path = 'C:\\Users\\stillomid\\Desktop'
     def excelBuilder(dataFrame = None, dir = path ,excelName = 'omid' , sheetName = 'sheetOmid'):
         writer = pd.ExcelWriter(dir + '\\' +excelName +'.xlsx', engine='xlsxwriter')
-        dataFrame.to_excel(writer, sheet_name=sheetName)
+        dataFrame.to_excel(writer, sheet_name=sheetName ,index=False)
         worksheet = writer.sheets[sheetName]
         worksheet.right_to_left()
         writer.save()
