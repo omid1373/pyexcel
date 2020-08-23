@@ -76,6 +76,16 @@ class File:
         total = File.total
         header = File.header
         for i in range(len(File.names)):
+            for row in File.arr[i]:
+                flag = False
+                for j in range(len(total)):
+                    if float(row[1]) == float(total[j][4]):
+                        flag = True
+                buffer = [['Unknown'] * 4 + [row[1]] + ['Null'] * (len(total[1]) - 5)]
+                if not flag:
+                    total = np.append(total, buffer, axis=0)
+        # ------------------------------------------------------------------------
+        for i in range(len(File.names)):
             N = len(total)
             total = np.c_[total, np.zeros(N)]
             header.append(File.names[i])
@@ -85,11 +95,8 @@ class File:
                 empty = ['Null'] * N
                 total = np.c_[total, empty]
                 header.append(File.names[i] + '__Link'+str(k))
-            # if 9336660061 in total:
-            #     print('Bitch')
-            # print(total)
-            # return
-            if len(File.arr[i][1]) > 18: plus += 2
+
+            if len(File.arr[i][1]) > 18 : plus += 2
             for row in File.arr[i]:
                 for j in range(len(total)):
                     if float(row[1]) == float(total[j][4]):
@@ -99,27 +106,18 @@ class File:
                             total[j][3 * i + 7] = row[11]
                             total[j][3 * i + 8] = row[12]
                             total[j][3 * i + 9] = row[13]
-                            # print( len(row))
-                        elif row[1] in total:
-                            print(row[1])
-                            buffer = [['Unknown'] * 4 + [row[1]] + ['Null'] * (len(total[1]) - 5)]
-                            bb= ['wswwsw']
-                            cc = np.array(bb)
-                            np.append( cc ,np.array(['ssss']))
-                            print(bb)
-                            # total[len(total)-1] = buffer
-                            f = open(File.path + "\\pop.txt", "w+")
-                            for pp in range(len(total)):
-                                f.write(str(total[pp][4])+'\t'+ str(total[pp][2]) +'\n')
-                            f.close()
-                            print(total)
-                            return
+                        # elif row[1] in total:
+                        #     print(row[1])
+                        #     buffer = [['Unknown'] * 4 + [row[1]] + ['Null'] * (len(total[1]) - 5)]
+                        #     total = np.append(total, buffer, axis=0)
+                        #     print(total)
+                        #     return
                         else:
-                            # print(plus , len(row))
                             total[j][3 * i + 5 + plus] = row[12]
                             total[j][3 * i + 6 + plus] = row[10]
                             total[j][3 * i + 7 + plus] = row[11]
                         continue
-        # dataFrame = pd.DataFrame(total , index = None , columns= header)
-        # save.excelBuilder(dataFrame)
-        # return dataFrame
+
+        dataFrame = pd.DataFrame(total , index = None , columns= header)
+        save.excelBuilder(dataFrame)
+        return dataFrame
